@@ -1,0 +1,28 @@
+//- there are two types of comments, one is outputted in the html and the other is not. REMEMBER.
+doctype html 
+html 
+  head
+    block head
+      meta(charset='UTF-8')
+      meta(http-equiv="Content-Security-Policy" content="default-src 'self' https://unpkg.com/axios/dist/")
+      meta(name='viewport' content='width=device-width, initial-scale=1.0')
+      title Natours | #{title}
+      link(rel='stylesheet' href='/css/style.css')
+      link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
+  body  
+    // HEADER
+    include _header 
+    // CONTENT
+    block content  
+      h1 This is just a placeholder 
+    
+    // FOOTER
+    include _footer
+    
+    block script
+      script(src='/js/index.js')
+    
+
+
+        
+
