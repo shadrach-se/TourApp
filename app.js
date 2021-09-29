@@ -7,33 +7,30 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
-
-const AppError = require("./utils/appError");
-const GlobalErrorHandler = require("./controllers/errorControllers");
-
-const viewRouter = require("./routes/viewRoutes");
-const tourRouter = require("./routes/tourRoutes");
-const userRouter = require("./routes/userRoutes");
-const reviewRouter = require("./routes/reviewRoutes");
-
+const AppError = require("./src/utils/appError");
+const GlobalErrorHandler = require("./src/controllers/errorControllers");
+const viewRouter = require("./src/routes/viewRoutes");
+const routes = require('./src/routes')
 const app = express();
 
 // Views engine
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "src/views"));
 
 // Static files...
 app.use(express.static(path.join(__dirname, "public")));
 
 // Http headers
-app.use(
-  helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      "script-src": ["'self'", "https://unpkg.com/axios/dist/"],
-    },
-  })
-);
+app.use(helmet())
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     useDefaults: true,
+//     directives: {
+//       "script-src": ["'self'", "https://unpkg.com/axios/dist/"],
+//     },
+//   })
+// );
+
 
 // Log http request information
 if (process.env.NODE_ENV === "development") {
@@ -75,22 +72,14 @@ app.use(
   })
 );
 
-// Display cookies
-app.use((req, res, next) => {
-  // console.log(req.cookies);
-  next();
-});
 
 //Route Handlers...
 app.use("/", viewRouter);
-app.use("/api/v1/tours", tourRouter);
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/reviews", reviewRouter);
+app.use('/api/v1', routes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl}`, 404));
 });
-
 app.use(GlobalErrorHandler);
 
 module.exports = app;

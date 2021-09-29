@@ -13,9 +13,9 @@ const {
 } = require("../controllers/authControllers");
 const router = express.Router();
 
-router.get("/", isLoggedIn, getOverview);
-router.get("/tour/:slug", isLoggedIn, getTour);
-router.get("/login", isLoggedIn, getLogin);
+router.get("/", getOverview);
+router.get("/tour/:slug", getTour);
+router.get("/login", getLogin);
 router.get("/logout", verifyLoggedIn, logout);
 router.get("/me", verifyLoggedIn, getMe);
 
